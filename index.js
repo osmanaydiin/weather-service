@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 
 // İzin verilen web adresi
-const allowedReferer = 'http://localhost:3000/'; // Buraya izin vermek istediğiniz web adresini yazın
+/* const allowedReferer = 'http://localhost:3000/'; // Buraya izin vermek istediğiniz web adresini yazın
 
 
 // Referer başlığını kontrol eden middleware
@@ -32,7 +32,18 @@ app.use((req, res, next) => {
     } else {
         res.status(403).send('Erişim engellendi: Bu web adresine izin verilmiyor.');
     }
-});
+}); */
+
+const allowedOrigins = ['http://localhost:3000/'];
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS hatası: İzin verilmeyen alan adı'));
+        }
+    }
+}));
 
 app.get('/api/maps-proxy', async (req, res) => {
     try {
